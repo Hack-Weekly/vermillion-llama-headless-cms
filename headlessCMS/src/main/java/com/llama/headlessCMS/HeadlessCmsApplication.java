@@ -7,7 +7,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class HeadlessCmsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HeadlessCmsApplication.class, args);
+
+		try {
+			SpringApplication.run(HeadlessCmsApplication.class, args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
 	}
 
 }
