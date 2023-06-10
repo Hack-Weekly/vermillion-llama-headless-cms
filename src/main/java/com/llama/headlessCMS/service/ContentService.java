@@ -4,16 +4,17 @@ import com.llama.headlessCMS.dto.ContentCreateRequestDTO;
 import com.llama.headlessCMS.dto.ContentUpdateRequestDTO;
 import com.llama.headlessCMS.model.Content;
 import com.llama.headlessCMS.repository.ContentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ContentService {
+    private final ContentRepository contentRepository;
 
-    @Autowired
-    private ContentRepository contentRepository;
+    public ContentService(ContentRepository contentRepository) {
+        this.contentRepository = contentRepository;
+    }
 
     public Content createContent(ContentCreateRequestDTO content) {
         Content newContent = content.toContent();
@@ -36,21 +37,37 @@ public class ContentService {
         return contentRepository.findByTitle(title);
     }
 
-    public Content updateContent(ContentUpdateRequestDTO newContentDTO) {
-        Content oldContent = contentRepository.findById(newContentDTO.getId()).orElseThrow(() -> new RuntimeException("Content not found for this id :: " + newContentDTO.getId()));
+    public Content updateContent(String id, ContentUpdateRequestDTO newContentDTO) {
+        Content oldContent = contentRepository.findById(id).orElseThrow(() -> new RuntimeException("Content not found for this id :: " + id));
 
-        oldContent.setType(newContentDTO.getType());
-        oldContent.setTitle(newContentDTO.getTitle());
-        oldContent.setData(newContentDTO.getData());
-        oldContent.setAuthor(newContentDTO.getAuthor());
-        oldContent.setAltText(newContentDTO.getAltText());
-        oldContent.setStatus(newContentDTO.getStatus());
+        if (newContentDTO.getType() != null) {
+            oldContent.setType(newContentDTO.getType());
+        }
+
+        if (newContentDTO.getTitle() != null) {
+            oldContent.setTitle(newContentDTO.getTitle());
+        }
+
+        if (newContentDTO.getData() != null) {
+            oldContent.setData(newContentDTO.getData());
+        }
+
+        if (newContentDTO.getAuthor() != null) {
+            oldContent.setAuthor(newContentDTO.getAuthor());
+        }
+
+        if (newContentDTO.getAltText() != null) {
+            oldContent.setAltText(newContentDTO.getAltText());
+        }
+
+        if (newContentDTO.getStatus() != null) {
+            oldContent.setStatus(newContentDTO.getStatus());
+        }
+
         return contentRepository.save(oldContent);
     }
 
-    public String deleteContent(String id) {
+    public void deleteContent(String id) {
         contentRepository.deleteById(id);
-        return "Content with ID: " + id + " deleted successfully.";
     }
-
 }

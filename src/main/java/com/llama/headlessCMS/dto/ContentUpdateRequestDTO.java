@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ContentUpdateRequestDTO {
-    private String id;
     private String type;
     private String title;
     private String data;

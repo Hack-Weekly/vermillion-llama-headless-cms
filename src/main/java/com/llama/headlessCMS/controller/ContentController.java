@@ -5,8 +5,8 @@ import com.llama.headlessCMS.dto.ContentCreateRequestDTO;
 import com.llama.headlessCMS.dto.ContentUpdateRequestDTO;
 import com.llama.headlessCMS.model.Content;
 import com.llama.headlessCMS.service.ContentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +14,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/cms/content")
 public class ContentController {
+    private final ContentService contentService;
 
-    @Autowired
-    private ContentService contentService;
+    public ContentController(ContentService contentService) {
+        this.contentService = contentService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,15 +46,18 @@ public class ContentController {
         return contentService.getContentByTitle(title);
     }
 
-    @PutMapping
-    public Content updateContent(@RequestBody ContentUpdateRequestDTO requestDTO) {
-        return contentService.updateContent(requestDTO);
+    @PatchMapping("/{id}")
+    public Content updateContent(@PathVariable String id, @Validated @RequestBody ContentUpdateRequestDTO requestDTO) {
+        return contentService.updateContent(id, requestDTO);
     }
 
     @DeleteMapping("/{id}")
     public String deleteContent(@PathVariable String id) {
-        return contentService.deleteContent(id);
+        try {
+            contentService.deleteContent(id);
+            return "Content with id: " + id + " deleted successfully.";
+        } catch (Exception e) {
+            return "Error deleting content: " + e.getMessage();
+        }
     }
-
-
 }
