@@ -1,6 +1,8 @@
 package com.llama.headlessCMS.controller;
 
 
+import com.llama.headlessCMS.dto.ContentCreateRequestDTO;
+import com.llama.headlessCMS.dto.ContentUpdateRequestDTO;
 import com.llama.headlessCMS.model.Content;
 import com.llama.headlessCMS.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,8 @@ public class ContentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Content createContent(@RequestBody Content content) {
-        return contentService.createContent(content);
+    public Content createContent(@RequestBody ContentCreateRequestDTO requestDTO) {
+        return contentService.createContent(requestDTO);
     }
 
     @GetMapping
@@ -27,9 +29,9 @@ public class ContentController {
         return contentService.getAllContent();
     }
 
-    @GetMapping("/data/{_id}")
-    public Content getContentById(@PathVariable String _id) {
-        return contentService.getContentById(_id);
+    @GetMapping("/data/{id}")
+    public Content getContentById(@PathVariable String id) {
+        return contentService.getContentById(id);
     }
 
     @GetMapping("/author/{author}")
@@ -43,13 +45,13 @@ public class ContentController {
     }
 
     @PutMapping
-    public Content updateContent(@RequestBody Content content) {
-        return contentService.updateContent(content);
+    public Content updateContent(@RequestBody ContentUpdateRequestDTO requestDTO) {
+        return contentService.updateContent(requestDTO);
     }
 
-    @DeleteMapping("/{_id}")
-    public String deleteContent(@PathVariable String _id) {
-        return contentService.deleteContent(_id);
+    @DeleteMapping("/{id}")
+    public String deleteContent(@PathVariable String id) {
+        return contentService.deleteContent(id);
     }
 
 

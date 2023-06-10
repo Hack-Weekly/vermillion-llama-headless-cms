@@ -1,5 +1,7 @@
 package com.llama.headlessCMS.controller;
 
+import com.llama.headlessCMS.dto.UserCreateRequestDTO;
+import com.llama.headlessCMS.model.Role;
 import com.llama.headlessCMS.model.User;
 import com.llama.headlessCMS.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +19,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public User createUser(@RequestBody UserCreateRequestDTO requestDTO) {
+        return userService.createUser(requestDTO);
     }
 
     @GetMapping
@@ -26,18 +28,18 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/user/{userId}")
-    public List<User> getUser(@PathVariable String userId) {
-        return userService.getUserByUserId(userId);
+    @GetMapping("/user/{username}")
+    public List<User> getUser(@PathVariable String username) {
+        return userService.getUserByUsername(username);
     }
 
     @GetMapping("/role/{role}")
-    public List<User> getUserByRole(@PathVariable String role) {
+    public List<User> getUserByRole(@PathVariable Role role) {
         return userService.getUserByRole(role);
     }
 
-    @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable String userId) {
-        return userService.deleteUser(userId);
+    @DeleteMapping("/{username}")
+    public String deleteUser(@PathVariable String username) {
+        return userService.deleteUser(username);
     }
 }

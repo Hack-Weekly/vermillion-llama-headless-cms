@@ -1,8 +1,9 @@
 package com.llama.headlessCMS.service;
 
+import com.llama.headlessCMS.dto.UserCreateRequestDTO;
+import com.llama.headlessCMS.model.Role;
 import com.llama.headlessCMS.model.User;
 import com.llama.headlessCMS.repository.UserRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(User user) {
-        user.set_id(new ObjectId().toHexString());
+    public User createUser(UserCreateRequestDTO userDTO) {
+        User user = userDTO.toUser();
         return userRepository.save(user);
     }
 
@@ -24,16 +25,16 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public List<User> getUserByUserId(String userId) {
-        return userRepository.findUserByUserId(userId);
+    public List<User> getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
     }
 
-    public List<User> getUserByRole(String role) {
+    public List<User> getUserByRole(Role role) {
         return userRepository.findByRole(role);
     }
 
-    public String deleteUser(String userId) {
-        userRepository.deleteByUserId(userId);
-        return "User: " + userId + " deleted successfully.";
+    public String deleteUser(String username) {
+        userRepository.deleteByUsername(username);
+        return "User: " + username + " deleted successfully.";
     }
 }
